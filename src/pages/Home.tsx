@@ -1,313 +1,217 @@
 import { Link } from 'react-router-dom'
 import {
-  Zap, Bell, CheckCircle, RotateCcw, XCircle, Lock, RefreshCw,
-  ArrowRight, ExternalLink, Shield, Clock
+  Zap, RefreshCw, Code2, ArrowRight, CheckCircle,
+  CreditCard, Building2, Lock, BarChart3, Webhook
 } from 'lucide-react'
 
-const FEATURES = [
-  { icon: Zap, label: '결제 요청 테스트', color: 'text-yellow-400', bg: 'bg-yellow-400/10' },
-  { icon: Bell, label: 'Webhook 시뮬레이션', color: 'text-blue-400', bg: 'bg-blue-400/10' },
-  { icon: CheckCircle, label: '승인 API 테스트', color: 'text-emerald-400', bg: 'bg-emerald-400/10' },
-  { icon: RotateCcw, label: '취소 테스트', color: 'text-orange-400', bg: 'bg-orange-400/10' },
-  { icon: XCircle, label: '실패 시나리오', color: 'text-red-400', bg: 'bg-red-400/10' },
-  { icon: Lock, label: 'Redis Lock 설명', color: 'text-purple-400', bg: 'bg-purple-400/10' },
-  { icon: RefreshCw, label: 'Idempotency 설명', color: 'text-cyan-400', bg: 'bg-cyan-400/10' },
-]
-
-const PG_PROVIDERS = [
+const MERCHANT_BENEFITS = [
   {
-    id: 'portone',
-    name: 'PortOne',
-    subtitle: '구 아이포트 · 국내 최다 PG 연동',
-    emoji: '🔵',
-    color: 'border-blue-500/40 hover:border-blue-500/80',
-    accent: 'bg-blue-500/10',
-    textAccent: 'text-blue-400',
-    badge: { label: '현재 연동', style: 'bg-blue-500/20 text-blue-400 border-blue-500/30' },
-    features: [
-      '분산락 (Redisson) 적용',
-      '결제 금액 위변조 방지',
-      'Webhook 멱등성 보장',
-      '자동 복구 스케줄러 (5분)',
-      'SAGA 패턴 (실패 시 자동 취소)',
-      '부분 취소 / 전액 취소',
-      'PG 단건 조회 재검증',
-    ],
-    available: true,
-    link: '/playground',
-    docsUrl: 'https://developers.portone.io',
+    icon: CreditCard,
+    title: '결제 수단은 PayCore가 처리',
+    desc: '가맹점은 API 하나만 호출하면 됩니다. 카드·간편결제·가상계좌·휴대폰 결제 모두 동일한 인터페이스로 처리됩니다.',
+    color: 'text-blue-400', bg: 'bg-blue-500/10',
   },
   {
-    id: 'toss',
-    name: 'TossPayments',
-    subtitle: '토스페이먼츠 · 간편결제 대표',
-    emoji: '💙',
-    color: 'border-sky-500/40 hover:border-sky-500/80',
-    accent: 'bg-sky-500/10',
-    textAccent: 'text-sky-400',
-    badge: { label: 'PortOne 경유', style: 'bg-sky-500/20 text-sky-400 border-sky-500/30' },
-    features: [
-      '카드 결제 (신용/체크)',
-      '계좌이체',
-      '가상계좌',
-      '브랜드페이 (간편결제)',
-      'Webhook 수신',
-      '에스크로 지원',
-      '정기결제 (빌링키)',
-    ],
-    available: true,
-    link: '/playground',
-    docsUrl: 'https://docs.tosspayments.com',
+    icon: Lock,
+    title: '카드 정보는 가맹점에 남지 않음',
+    desc: '고객의 카드 정보는 PG사에서 직접 처리합니다. 가맹점 서버에는 결제 결과만 전달됩니다.',
+    color: 'text-emerald-400', bg: 'bg-emerald-500/10',
   },
   {
-    id: 'kakao',
-    name: 'KakaoPay',
-    subtitle: '카카오페이 · 국내 최대 간편결제',
-    emoji: '💛',
-    color: 'border-yellow-500/40 hover:border-yellow-500/80',
-    accent: 'bg-yellow-500/10',
-    textAccent: 'text-yellow-400',
-    badge: { label: 'PortOne 경유', style: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30' },
-    features: [
-      'QR 코드 결제',
-      '앱 간편결제',
-      '자동결제 (정기)',
-      'Webhook 수신',
-      '카카오페이 포인트',
-      '부분 취소 지원',
-      '모바일 최적화',
-    ],
-    available: true,
-    link: '/playground',
-    docsUrl: 'https://developers.kakao.com/docs/latest/ko/kakaopay',
+    icon: Webhook,
+    title: 'Webhook으로 실시간 알림',
+    desc: '결제 완료·취소·가상계좌 입금 시 가맹점 서버로 자동 알림을 보냅니다. 폴링 없이 실시간 처리.',
+    color: 'text-purple-400', bg: 'bg-purple-500/10',
   },
   {
-    id: 'naver',
-    name: '네이버페이',
-    subtitle: '네이버 · 포인트 기반 간편결제',
-    emoji: '💚',
-    color: 'border-green-500/30 hover:border-green-500/50',
-    accent: 'bg-green-500/10',
-    textAccent: 'text-green-400',
-    badge: { label: '준비중', style: 'bg-gray-700 text-gray-400 border-gray-600' },
-    features: [
-      '네이버페이 결제',
-      '네이버포인트 적립',
-      '분할 납부 지원',
-      'Webhook 수신',
-      '자동결제',
-      '구독 서비스',
-    ],
-    available: false,
-    link: '/playground',
-    docsUrl: 'https://developer.pay.naver.com',
+    icon: RefreshCw,
+    title: '정기결제 · 구독 지원',
+    desc: '빌링키를 한 번 발급하면 가맹점이 원하는 주기에 자동으로 결제를 처리할 수 있습니다.',
+    color: 'text-yellow-400', bg: 'bg-yellow-500/10',
   },
   {
-    id: 'stripe',
-    name: 'Stripe',
-    subtitle: '글로벌 결제 표준 · 해외카드',
-    emoji: '🟣',
-    color: 'border-purple-500/30 hover:border-purple-500/50',
-    accent: 'bg-purple-500/10',
-    textAccent: 'text-purple-400',
-    badge: { label: '준비중', style: 'bg-gray-700 text-gray-400 border-gray-600' },
-    features: [
-      '해외 신용카드 지원',
-      'Apple Pay / Google Pay',
-      '구독 결제',
-      '3D Secure',
-      'Webhook',
-      '분할결제',
-    ],
-    available: false,
-    link: '/playground',
-    docsUrl: 'https://stripe.com/docs',
+    icon: Building2,
+    title: '가상계좌 발급 자동화',
+    desc: '고객에게 개인화된 계좌번호를 발급합니다. 입금 시 PayCore가 자동으로 확인하고 가맹점에 알립니다.',
+    color: 'text-sky-400', bg: 'bg-sky-500/10',
+  },
+  {
+    icon: BarChart3,
+    title: '중복 결제 · 이중청구 방지',
+    desc: 'Redis 분산락과 멱등성 처리로 네트워크 오류가 생겨도 절대 중복 결제가 발생하지 않습니다.',
+    color: 'text-rose-400', bg: 'bg-rose-500/10',
   },
 ]
 
-const ARCH_ITEMS = [
-  { label: 'frontend', items: ['payment-guide-ui'], color: 'text-blue-400' },
-  { label: 'backend', items: ['payment-api', 'webhook-api', 'pg-adapter', 'payment-core', 'payment-logs'], color: 'text-emerald-400' },
-  { label: 'infra', items: ['PostgreSQL', 'Redis (Redisson)', 'PortOne API'], color: 'text-orange-400' },
+const FLOW_STEPS = [
+  {
+    actor: '가맹점 서버',
+    color: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
+    steps: [
+      '고객이 주문 → 가맹점 서버에서 주문번호 생성',
+      'POST /api/v1/payments 호출 (금액, 결제수단 전달)',
+    ],
+  },
+  {
+    actor: 'PayCore',
+    color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
+    steps: [
+      'PG사 API로 결제 승인 요청',
+      '결제 결과 저장 (분산락·멱등성 자동 처리)',
+      '가맹점 Webhook URL로 결과 알림 발송',
+    ],
+  },
+  {
+    actor: '가맹점 서버',
+    color: 'text-blue-400 bg-blue-500/10 border-blue-500/30',
+    steps: [
+      'Webhook 수신 → 주문 상태 업데이트',
+      '고객에게 결제 완료 응답',
+    ],
+  },
 ]
 
 export default function Home() {
   return (
-    <div className="bg-grid-pattern">
+    <div className="lg:ml-60 bg-gray-950">
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/5 to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-24 sm:py-32">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              PortOne V1 API · Spring Boot · Redis Distributed Lock
-            </span>
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Payment Integration
-              <span className="block gradient-text">Playground</span>
-            </h1>
-
-            <p className="text-lg text-gray-400 leading-relaxed mb-10">
-              실제 결제 플랫폼처럼 구성된 결제 통합 테스트 환경입니다.
-              <br className="hidden sm:inline" />
-              결제 흐름 시각화부터 위변조 방지까지 직접 체험해 보세요.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                to="/playground"
-                className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition-colors"
-              >
-                결제 테스트 시작 <ArrowRight size={16} />
-              </Link>
-              <Link
-                to="/flow"
-                className="flex items-center gap-2 px-6 py-3 border border-gray-700 hover:border-gray-500 text-gray-300 hover:text-white font-medium rounded-xl transition-colors"
-              >
-                결제 플로우 보기
-              </Link>
-            </div>
+      <section className="relative overflow-hidden border-b border-gray-800/60">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/8 via-transparent to-transparent pointer-events-none" />
+        <div className="max-w-3xl mx-auto px-6 sm:px-10 pt-20 pb-20 relative">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium mb-7">
+            <Zap size={11} fill="currentColor" />
+            가맹점용 결제 API · PortOne 기반
           </div>
-
-          {/* Feature Chips */}
-          <div className="mt-16 flex flex-wrap justify-center gap-3">
-            {FEATURES.map((f) => (
-              <div
-                key={f.label}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border border-gray-800 bg-gray-900/60 ${f.color}`}
-              >
-                <span className={`p-1 rounded-full ${f.bg}`}>
-                  <f.icon size={12} />
-                </span>
-                <span className="text-sm text-gray-300">{f.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="border-y border-gray-800/60 bg-gray-900/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-            {[
-              { value: '6+', label: '결제 시나리오 테스트', icon: CheckCircle },
-              { value: '5min', label: 'PENDING 자동 복구 주기', icon: Clock },
-              { value: '3-PG', label: '연동 결제사', icon: Shield },
-              { value: '100%', label: '멱등성 보장', icon: RefreshCw },
-            ].map((s) => (
-              <div key={s.label} className="flex flex-col items-center gap-1">
-                <s.icon size={18} className="text-blue-400 mb-1" />
-                <span className="text-2xl font-bold text-white">{s.value}</span>
-                <span className="text-xs text-gray-500">{s.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PG Provider Cards */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div className="mb-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">결제 연동 가이드</h2>
-          <p className="text-gray-400">
-            각 PG사별 결제 연동 방식과 기능을 확인하고 직접 테스트해 보세요.
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-5 leading-tight">
+            결제 연동, 한 번으로
+            <br />
+            <span className="text-blue-400">끝냅니다</span>
+          </h1>
+          <p className="text-lg text-gray-400 mb-8 leading-relaxed max-w-xl">
+            가맹점은 PayCore API 하나만 연동하면 됩니다.
+            카드 처리, PG 라우팅, Webhook 알림, 취소·환불까지
+            PayCore가 전부 대신합니다.
           </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {PG_PROVIDERS.map((pg) => (
-            <div
-              key={pg.id}
-              className={`card p-6 border transition-all duration-200 ${pg.color}`}
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              to="/quickstart"
+              className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-500/20 text-sm"
             >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl ${pg.accent}`}>
-                    {pg.emoji}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-white">{pg.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{pg.subtitle}</p>
-                  </div>
-                </div>
-                <span className={`badge border ${pg.badge.style}`}>{pg.badge.label}</span>
-              </div>
+              빠르게 시작하기 <ArrowRight size={14} />
+            </Link>
+            <Link
+              to="/tutorial"
+              className="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 text-white font-medium rounded-xl transition-colors border border-gray-700 text-sm"
+            >
+              <Code2 size={14} /> 연동 튜토리얼 보기
+            </Link>
+          </div>
+          <div className="mt-8 flex flex-wrap gap-5 text-xs text-gray-500">
+            {['가맹점 API Key 인증', '분산락 · 멱등성 내장', 'Webhook 자동 재시도', 'ELK 로그 분석'].map((t) => (
+              <span key={t} className="flex items-center gap-1.5">
+                <CheckCircle size={11} className="text-emerald-600" />{t}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
 
-              {/* Features */}
-              <ul className="space-y-2 mb-6">
-                {pg.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                    <CheckCircle size={14} className="text-emerald-400 mt-0.5 shrink-0" />
-                    {f}
+      {/* 결제 흐름 */}
+      <section className="max-w-3xl mx-auto px-6 sm:px-10 py-16 border-b border-gray-800/60">
+        <h2 className="text-xl font-bold text-white mb-2">가맹점 결제 흐름</h2>
+        <p className="text-gray-500 text-sm mb-8">
+          가맹점은 PayCore에만 연동하면 됩니다. PG사별 개별 연동이 필요 없습니다.
+        </p>
+        <div className="space-y-4">
+          {FLOW_STEPS.map((section, i) => (
+            <div key={i} className={`rounded-xl border p-4 ${section.color.split(' ').slice(1).join(' ')}`}>
+              <p className={`text-xs font-bold uppercase tracking-wider mb-3 ${section.color.split(' ')[0]}`}>
+                {section.actor}
+              </p>
+              <ul className="space-y-1.5">
+                {section.steps.map((step, j) => (
+                  <li key={j} className="flex items-start gap-2 text-sm text-gray-300">
+                    <span className="text-gray-600 mt-0.5">→</span>{step}
                   </li>
                 ))}
               </ul>
-
-              {/* Actions */}
-              <div className="flex gap-2">
-                <a
-                  href={pg.docsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm border border-gray-700 rounded-lg text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
-                >
-                  공식 문서 <ExternalLink size={12} />
-                </a>
-                {pg.available ? (
-                  <Link
-                    to={`${pg.link}?pg=${pg.id}`}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors"
-                  >
-                    직접 테스트 <ArrowRight size={12} />
-                  </Link>
-                ) : (
-                  <button
-                    disabled
-                    className="flex-1 px-3 py-2 text-sm bg-gray-800 text-gray-600 rounded-lg cursor-not-allowed"
-                  >
-                    준비중
-                  </button>
-                )}
-              </div>
             </div>
           ))}
         </div>
+        <p className="text-xs text-gray-600 mt-4 text-center">
+          고객의 카드 정보는 PG사에서만 처리 · 가맹점 서버에 저장되지 않음
+        </p>
       </section>
 
-      {/* Architecture */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="card p-6 sm:p-8">
-          <h2 className="text-xl font-bold text-white mb-6">서비스 아키텍처</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {ARCH_ITEMS.map((layer) => (
-              <div key={layer.label}>
-                <p className={`text-xs font-mono font-semibold mb-3 ${layer.color}`}>
-                  {layer.label}/
-                </p>
-                <ul className="space-y-2">
-                  {layer.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-gray-600" />
-                      <span className="text-sm text-gray-400 font-mono">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+      {/* 가맹점 혜택 */}
+      <section className="max-w-3xl mx-auto px-6 sm:px-10 py-16 border-b border-gray-800/60">
+        <h2 className="text-xl font-bold text-white mb-2">가맹점이 직접 구현하지 않아도 되는 것들</h2>
+        <p className="text-gray-500 text-sm mb-8">PayCore가 대신 처리합니다.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {MERCHANT_BENEFITS.map((f) => {
+            const Icon = f.icon
+            return (
+              <div key={f.title} className="p-5 rounded-xl border border-gray-800 bg-gray-900/40 hover:border-gray-700 transition-colors">
+                <div className={`w-9 h-9 rounded-lg ${f.bg} flex items-center justify-center mb-3`}>
+                  <Icon size={17} className={f.color} />
+                </div>
+                <h3 className="font-semibold text-white text-sm mb-1.5">{f.title}</h3>
+                <p className="text-xs text-gray-400 leading-relaxed">{f.desc}</p>
               </div>
-            ))}
-          </div>
+            )
+          })}
+        </div>
+      </section>
 
-          <div className="mt-8 pt-6 border-t border-gray-800 flex flex-wrap gap-3">
-            <Link to="/flow" className="btn-primary flex items-center gap-2">
-              결제 플로우 시각화 보기 <ArrowRight size={14} />
-            </Link>
-            <Link to="/security" className="btn-secondary flex items-center gap-2">
-              서버 검증이 필요한 이유
-            </Link>
+      {/* API 미리보기 */}
+      <section className="max-w-3xl mx-auto px-6 sm:px-10 py-16">
+        <h2 className="text-xl font-bold text-white mb-2">연동은 이것만으로 충분합니다</h2>
+        <p className="text-gray-500 text-sm mb-6">결제 요청 API 하나로 모든 결제 수단을 처리합니다.</p>
+        <div className="rounded-xl overflow-hidden border border-gray-800">
+          <div className="bg-gray-900 border-b border-gray-800 px-4 py-2 flex items-center gap-2">
+            <div className="flex gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-500/60" />
+              <span className="w-3 h-3 rounded-full bg-yellow-500/60" />
+              <span className="w-3 h-3 rounded-full bg-green-500/60" />
+            </div>
+            <span className="text-xs text-gray-500 font-mono ml-1">POST /api/v1/payments</span>
           </div>
+          <pre className="bg-gray-950 p-5 text-sm leading-relaxed overflow-x-auto">
+            <code className="text-gray-300 font-mono">{`// 헤더
+X-Merchant-Id: your-merchant-id
+X-Api-Key:     your-secret-key
+
+// 요청 본문
+{
+  "merchantId":      "your-merchant-id",
+  "merchantOrderId": "ORD-20260531-00001",  // 가맹점 주문번호
+  "amount":          30000,
+  "paymentMethod":   "CARD",                // CARD | MOBILE | BANK_TRANSFER
+  "orderName":       "MacBook Air M3"
+}
+
+// 응답
+{
+  "success": true,
+  "data": {
+    "merchantOrderId": "ORD-20260531-00001",
+    "paymentStatus":   "PAID",
+    "paidAmount":      30000,
+    "txId":            "pg_tx_abc123"
+  }
+}`}</code>
+          </pre>
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            to="/tutorial"
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-xl transition-colors text-sm"
+          >
+            연동 튜토리얼 시작 <ArrowRight size={14} />
+          </Link>
+          <Link to="/reference" className="flex items-center gap-2 px-5 py-2.5 text-gray-400 hover:text-white border border-gray-700 hover:border-gray-600 rounded-xl transition-colors text-sm">
+            전체 API 보기
+          </Link>
         </div>
       </section>
     </div>

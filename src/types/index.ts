@@ -4,57 +4,49 @@ export interface ApiResponse<T> {
   data: T
 }
 
-export interface OrderCreateRequest {
-  userId: number
-  itemId: number
-  amount: number
-}
+// 백엔드 PaymentMethod enum
+export type PaymentMethod = 'CARD' | 'MOBILE' | 'BANK_TRANSFER'
 
-export interface OrderCreateResponse {
-  orderNo: string
-  status: OrderStatus
-  totalAmount: number
-  createdAt: string | number[]
-}
-
-export type OrderStatus = 'PENDING' | 'PAID' | 'CANCELLED' | 'FAILED'
+// 백엔드 PaymentStatus enum
 export type PaymentStatus = 'PAID' | 'CANCELLED' | 'PARTIAL_CANCELLED'
 
-export interface PaymentVerifyRequest {
-  imp_uid: string
-  merchant_uid: string
+// POST /api/v1/payments 요청
+export interface PaymentRequest {
+  merchantId: string
+  merchantOrderId: string
+  amount: number
+  paymentMethod: PaymentMethod
+  orderName?: string
 }
 
+// POST /api/v1/payments, /cancel, GET /payments/{id} 응답
 export interface PaymentResponse {
-  orderNo: string
-  orderStatus: OrderStatus
-  impUid: string
-  payMethod: string
+  merchantOrderId: string
+  txId: string
+  paymentMethod: PaymentMethod
   paidAmount: number
   cancelledAmount: number
   paymentStatus: PaymentStatus
   createdAt: string
 }
 
+// POST /api/v1/payments/cancel 요청
 export interface PaymentCancelRequest {
-  merchant_uid: string
+  merchantOrderId: string
   reason: string
   amount?: number
 }
 
 export interface WebhookLog {
   id: string
-  impUid: string
-  merchantUid: string
+  txId: string
+  merchantOrderId: string
   status: string
   receivedAt: string
-  trusted: boolean
-  verified: boolean
 }
 
 export interface Product {
   id: number
-  itemId: number
   name: string
   price: number
   description: string
@@ -69,4 +61,5 @@ export interface PGOption {
   description: string
   color: string
   payMethod: string
+  paymentMethod: PaymentMethod
 }

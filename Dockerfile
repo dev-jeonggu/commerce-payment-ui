@@ -8,6 +8,8 @@ RUN npm ci
 COPY . .
 ARG VITE_API_BASE_URL
 ARG VITE_IMP_CODE
+ARG VITE_MERCHANT_ID
+ARG VITE_MERCHANT_API_KEY
 RUN npm run build
 
 # Production stage
