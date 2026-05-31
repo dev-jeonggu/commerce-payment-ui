@@ -8,6 +8,14 @@ export const apiClient = axios.create({
   timeout: 15000,
 })
 
+apiClient.interceptors.request.use((config) => {
+  const merchantId = import.meta.env.VITE_MERCHANT_ID
+  const apiKey = import.meta.env.VITE_MERCHANT_API_KEY
+  if (merchantId) config.headers['X-Merchant-Id'] = merchantId
+  if (apiKey) config.headers['X-Api-Key'] = apiKey
+  return config
+})
+
 apiClient.interceptors.response.use(
   (res) => res,
   (err) => {

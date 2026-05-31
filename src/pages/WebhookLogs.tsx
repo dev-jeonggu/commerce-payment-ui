@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import { Bell, CheckCircle, AlertTriangle, Loader2, RefreshCw, Send, Shield, XCircle } from 'lucide-react'
-import { sendWebhook } from '../api/payments'
 import CodeBlock from '../components/CodeBlock'
 
 interface MockWebhookLog {
@@ -101,40 +100,23 @@ export default function WebhookLogs() {
     setSending(true)
     setSendResult(null)
 
-    try {
-      const res = await sendWebhook(impUid, merchantUid, simStatus)
-      const newLog: MockWebhookLog = {
-        id: generateId(),
-        impUid,
-        merchantUid,
-        status: simStatus,
-        receivedAt: new Date().toISOString(),
-        trusted: false,
-        verified: true,
-        pgVerified: res.success,
-        processingMs: Math.floor(80 + Math.random() * 150),
-      }
-      setLogs((prev) => [newLog, ...prev])
-      setSendResult({ success: res.success, message: res.message || 'Webhook 전송 완료' })
-    } catch (e) {
-      const errorMsg = e instanceof Error ? e.message : 'Webhook 전송 실패'
-      // 백엔드 없어도 로컬 목 로그 추가
-      const newLog: MockWebhookLog = {
-        id: generateId(),
-        impUid,
-        merchantUid,
-        status: simStatus,
-        receivedAt: new Date().toISOString(),
-        trusted: false,
-        verified: false,
-        pgVerified: false,
-        processingMs: 0,
-      }
-      setLogs((prev) => [newLog, ...prev])
-      setSendResult({ success: false, message: `[로컬 시뮬레이션] ${errorMsg}` })
-    } finally {
-      setSending(false)
+    // 은행 Webhook 엔드포인트는 내부 전용(X-Internal-Token)이므로 프론트에서 직접 호출하지 않음.
+    // 실제 운영에서는 은행/내부 시스템이 POST /api/v1/payments/webhook/bank 로 호출.
+    await new Promise((r) => setTimeout(r, 600))
+    const newLog: MockWebhookLog = {
+      id: generateId(),
+      impUid,
+      merchantUid,
+      status: simStatus,
+      receivedAt: new Date().toISOString(),
+      trusted: false,
+      verified: true,
+      pgVerified: true,
+      processingMs: Math.floor(80 + Math.random() * 150),
     }
+    setLogs((prev) => [newLog, ...prev])
+    setSendResult({ success: true, message: '[로컬 시뮬레이션] 로그 추가 완료 — 실제 전송은 내부 시스템에서 수행됩니다.' })
+    setSending(false)
   }, [simImpUid, simMerchantUid, simStatus])
 
   const formatTime = (iso: string) => {
